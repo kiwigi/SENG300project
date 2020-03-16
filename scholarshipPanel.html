@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Scholarship Panel</title>
+</head>
+
+<body>
+    <script src="js/guid.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
+    <script src="config.js"></script>
+
+    <h1>Scholarship Panel</h1>
+
+    <p>Scholarship Name:<input type="text" placeholder="scholarship" id="scholarshipField" /></p>
+    <p>Amount:<input type="number" placeholder="amount" id="amountField" /></p>
+    <p>Deadline:<input type="date" placeholder="deadline" id="deadlineField" /></p>
+    <p>GPA Requirement:<input type="number" step="0.1" min="0.0" max="4.3" placeholder="GPA Required" id="gpaField" /></p>
+    <button id="submitScholarship">Submit</button>
+    <p id="data"></p>
+
+    <script src="js/panels/scholarshipPanel.js"></script>
+</body>
+
+</html>
