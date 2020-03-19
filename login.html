@@ -1,22 +1,96 @@
+<!DOCTYPE html>
 <html>
+
     <head>
-        <title>Test Page</title>
+        <title>Login</title>
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="https://use.fontawesome.com/9c5fe71092.js"></script>
+
+        <style>
+            body {
+                background-image: url('');
+            }
+            h1 {
+                font-weight: bold;
+                margin-left: 10px;
+            }
+            p {
+                margin-left: 10px;
+            }
+            form {
+                margin-left: 10px;
+            }
+            input {
+                margin-left: 10px;
+            }
+        </style>    
+
     </head>
-    <style>
-        body {
-            background-image: url('stick-figure1.jpg');
-        }
-    </style>
+
     <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#"><i class="fa fa-university" aria-hidden="true"></i> Scholarship App Name</a>
+    
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="mainpage.html">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="scholarships.html">Scholarships</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Account<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+
+
+
+        <div>
+
+        </div>
+
         <h1>The University Login</h1>
-        <p>Please enter login info.</p>
-        <form action="/action_page.php">
+        <p title="Enter info below.">Please enter login info.</p>
+
+        <div class="loginArea">
+            <form action="#">
+                <p>Username</p>
+                <input type="text" name="" placeholder="Enter Username"><br><br>
+                <p>Password</p>
+                <input type="password" name="" placeholder="Enter Password"><br><br>
+                <input type="submit" name="" value="Login">
+                <a href="scholarships.html">Test</a>
+            </form>
+
+        </div>
+
+
+        <!--form action="/action_page.php">
+        <form>
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username"><br>
             <label for="password">Password:</label><br>
             <input type="text" id="password" name="password"><br><br>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Submit" href="scholarships.html">
             <form action="/action_page.php" target="_blank"></form>
-        </form>
+        </form-->
+
+
     </body>
+
 </html>
