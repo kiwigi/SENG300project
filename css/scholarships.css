@@ -1,0 +1,17 @@
+h2 {
+    padding-top: 0.5em;
+}
+
+.scholarship-info p {
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
+}
+
+.scholarship-info button {
+    margin-top: 0.5em;
+}
+
+#ic {
+    width: 25px;
+    text-align: center;
+}
