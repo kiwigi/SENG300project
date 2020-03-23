@@ -28,6 +28,8 @@
       amount: document.getElementById("amountField").value,
       deadline: document.getElementById("deadlineField").value,
       gpaRequired: document.getElementById("gpaField").value,
+      description: document.getElementById("descField").value,
+      degrees: $('#degrees').val(),
       dateAdded: Date(),
       addedBy: "ADMIN_ID" // TODO: Change this once account functionality is implemented
     })
