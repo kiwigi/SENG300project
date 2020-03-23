@@ -3,7 +3,7 @@
 
   // Get elements
   const txtEmail = document.getElementById('txtEmail');
-  const txtPassword = document.getElementById('txtEmail');
+  const txtPassword = document.getElementById('txtPassword');
   const btnLogin = document.getElementById('btnLogin');
   // const btnSignUp = document.getElementById('btnSignUp');
 
@@ -14,9 +14,10 @@
     const pass = txtPassword.value;
     const auth = firebase.auth();
     // Sign in
+    console.log('info:',email,pass);
     const promise = auth.signInWithEmailAndPassword(email, pass);
     promise
-    .catch(e => console.log(e.message));
+    .catch(e => console.log("> ERROR: ",e.message));
   });
 
   /*
