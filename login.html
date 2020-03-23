@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script src="https://use.fontawesome.com/9c5fe71092.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
 
         <style>
             body {
@@ -27,7 +31,7 @@
             input {
                 margin-left: 10px;
             }
-        </style>    
+        </style>
 
     </head>
 
@@ -37,11 +41,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand" href="#"><i class="fa fa-university" aria-hidden="true"></i> Scholarship App Name</a>
-    
+
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="mainpage.html">Home</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="scholarships.html">Scholarships</a>
@@ -58,38 +62,22 @@
         </nav>
 
 
-
-
-        <div>
-
-        </div>
-
         <h1>The University Login</h1>
         <p title="Enter info below.">Please enter login info.</p>
 
         <div class="loginArea">
             <form action="#">
-                <p>Username</p>
-                <input type="text" name="" placeholder="Enter Username"><br><br>
+                <p>Email</p>
+                <input id="txtEmail" type="email" placeholder="Enter Email"><br><br>
                 <p>Password</p>
-                <input type="password" name="" placeholder="Enter Password"><br><br>
-                <input type="submit" name="" value="Login">
-                <a href="scholarships.html">Test</a>
+                <input id="txtPassword" type="password" placeholder="Enter Password"><br><br>
+                <button id="btnLogin" class="btn btn-action">Log In</button>
+                <!-- <a href="scholarships.html">Test</a> -->
             </form>
-
         </div>
 
-
-        <!--form action="/action_page.php">
-        <form>
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
-            <label for="password">Password:</label><br>
-            <input type="text" id="password" name="password"><br><br>
-            <input type="submit" value="Submit" href="scholarships.html">
-            <form action="/action_page.php" target="_blank"></form>
-        </form-->
-
+        <script src="config.js"></script>
+        <script src="js/login/login.js"></script>
 
     </body>
 
