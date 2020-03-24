@@ -119,6 +119,8 @@
                             if (checkIfDegreeValid(scholarship, student) && checkIfGPAValid(scholarship, student)) {
                                 console.log("Student has appropriate major/minor and GPA for scholarship.");
                                 // Redirect user to apply page
+                                localStorage.setItem("SchID", scholarshipId);
+                                localStorage.setItem("SchName", scholarship.name);
                                 window.location = "application.html";
                             } else {
                                 alert("Invalid degree or GPA not high enough.")
