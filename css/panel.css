@@ -1,0 +1,25 @@
+.panel-sec {
+  border-radius: 7px;
+  border-style:solid;
+  border-color:#f8f8f8;
+  background-color: #fafafa;
+  margin-bottom: 1em;
+  min-height:20em;
+  padding:0.5em;
+  text-align:center;
+  line-height: 16em;
+}
+
+.panel-sec:hover {
+  background-color: #f8f8f8;
+}
+
+.panel-sec > span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
+#ic-big {
+  padding: 0.5em;
+}
