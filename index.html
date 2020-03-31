@@ -15,13 +15,14 @@
 
     <!-- Scripts for Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link href="https://davidstutz.de/bootstrap-multiselect/docs/css/bootstrap-3.3.2.min.css" rel="stylesheet"/>
-    <script src="https://davidstutz.de/bootstrap-multiselect/docs/js/bootstrap-3.3.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
     <!-- Scripts for FontAwesome -->
     <script src="https://use.fontawesome.com/9c5fe71092.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/panel.css">
 </head>
 
 <body>
@@ -51,15 +52,23 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <button id="btnLogout" class="btn btn-action">Log Out</button>
+    <div id="userInfo">
+      <span class="glyphicon glyphicon-user"></span><span id="userEmail"></span>
+      <button id="btnLogout" class="btn btn-action">Log Out</button>
+    </div>
+
     <script src="config.js"></script>
     <script src="app.js"></script>
+    <script src="js/users/userTools.js"></script>
+    <script src="js/panels/panelTypes.js"></script>
+    <script src="js/panels/indexPanel.js"></script>
 
     <div id= "center">
         <h1>Home</h1>
-        <h2>WELCOME!</h2>
-
-        <p>This will be the main page.</p>
+        <h2 id="portalType"></h2>
+        <p id='userType'></p><br>
+        <div id="panels" class="row">
+        </div>
     </div>
 
 </body>
