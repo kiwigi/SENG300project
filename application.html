@@ -74,12 +74,6 @@
 	<p>Phone Number:</p><input type="text" id="reference1phone" />
 	<p>E-mail:</p><input type="text" id="reference1email" />
 
-	<h4>Reference 2:</h4>
-	<p>Name:</p><input type="text" id="reference2name" />
-	<p>Phone Number:</p><input type="text" id="reference2phone" />
-	<p>E-mail:</p><input type="text" id="reference2email" />
-
-
 	<p>Supporting Documents:</p>
 	<input type="file" id="sFile"/>
 </form>
@@ -116,7 +110,10 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 
 	const btnSubmitScholarship = document.getElementById('subApp');
   	btnSubmitScholarship.addEventListener('click', e => {
-    addApplication();
+	addApplication();
+	//success message
+	//TO DO: MAKE THIS INTO A SEPARATE PAGE
+	alert('Thanks for your application!.');
   })
 
 
@@ -135,7 +132,6 @@ function addApplication(){
     .then(snapshot => snapshot.ref.getDownloadURL)
     .then(url => {
       console.log(url)
-      alert("File uploaded successfully!")
     })
     .catch(console.error);
 
@@ -143,7 +139,7 @@ function addApplication(){
 	
 	var schID = localStorage.getItem("SchID");
 	var sRef = firebase.database().ref("Scholarships/"+schID);
-	var aRef = sRef.child("applications");
+	var aRef = sRef.child("applications");						//application ref
 
 	///////////// get user data ////////////////
 
@@ -165,18 +161,16 @@ function addApplication(){
 		email: student.email,
 		year: student.year,
 		gpa: student.gpa,
-  		dateSubmitted: Date(),
-		reference1: document.getElementById("reference1name").value
-		//reference2: document.getElementById("ref2").value
-		//file: document.getElementById("real-file")
+		dateSubmitted: Date(),
+		nameOfReference: document.getElementById("reference1name").value,
+		phoneOfReference: document.getElementById("reference1phone").value,
+		emailOfReference: document.getElementById("reference1email").value
 	});
 })
 } 
 });
 }
-//success message
-//TO DO: MAKE THIS INTO A SEPARATE PAGE
-alert('Thanks for your application!.');
+
 </script>
 
 
