@@ -2,145 +2,184 @@
 <html lang="en">
 <head>
 <title>Scholarship Application Form</title>
+<meta charset="utf-8">
+	<title>Apply</title>
+
+	<!-- Scripts for Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-storage.js"></script>
+
+	<!-- Additional scripts for this specific webpage -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://davidstutz.de/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+	<link href="https://davidstutz.de/bootstrap-multiselect/docs/css/bootstrap-3.3.2.min.css" rel="stylesheet"/>
+	<link href="https://davidstutz.de/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet"/>
+	<script src="https://davidstutz.de/bootstrap-multiselect/docs/js/bootstrap-3.3.2.min.js"></script>
+	
+	<link rel="stylesheet" href="css/main.css">
+	
+	
 </head>
+
 <body>
-
+	<script src="config.js"></script>
+	<script src="app.js"></script>
 <!---------Headers----------------------------------->
-<h1>Scholarship Application Form</h1>
+	<h1>Scholarship Application Form</h1>
 
-<h2>Scholarship:</h2>
+	<h2 style="display:inline;">Scholarship: </h2> 
+	<h2 id="SName" style="display:inline;"></h2> 
+	<hr style="clear:both;"/>
 
-<h2>Student Information:</h2>
-
-<h3> (Ensure all fields are filled)</h3>
+	<h2>Student Information:</h2>
 <!--------------------------------------------------->
 
-<form>
-	<table class="formcontrols" >   
-	    <!-- "Name" label and textbox -->
-	    <tr>
-	        <td style="padding-left:10px;">
-	            <label for="Name">Name:</label><br>
-	        </td>
-	        <td >
-	 			<input type="text" id="name" name="name"><br>
-	        </td>
-	    </tr>
+<!--Gets scholarship name-->
+<script>
+	let schID = localStorage.getItem("SchID");
+	let ref = firebase.database().ref('/Scholarships/' + schID);
+	ref.on('value', function(snapshot) {
+	let sch = snapshot.val();
+	document.getElementById("SName").innerHTML = sch.name;
+	})
+</script>
 
-	    <!-- "Last name" label and textbox -->
-	    <tr>
-	        <td style="padding-left:10px;">
-	            <label for="Last name">Last name:</label>
-	        </td>
-	        <td>
-	            <input id="lastName" name="lastName">
-	        </td>
-	    </tr>
-
-	    <!-- "Year" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-	 			<label for="year">Year:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="name" name="year"><br>
-	    	</td>
-	    </tr>
-
-	    <!-- "Degree Type" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-	    		<label for="degreeType">Degree Type:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="degreeType" name="name"><br>
-	    	</td>
-	    </tr>
-
-	    <!--  "Department" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">	
-				<label for="department">Department:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="department" name="department"><br>
-	    	</td>
-	    </tr>
-
-	    <!--  "Faculty" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-	    		<label for="faculty">Faculty:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="faculty" name="faculty"><br>
-	    	</td>
-	    </tr>
-
-	    <!-- "Major" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-	    		<label for="major">Major:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="major" name="major"><br>
-	    	</td>
-	    </tr>
-
-	    <!-- "Email" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-	    		<label for="email">email:</label><br>
-	    	</td>
-	    	<td>
-	    		<input type="text" id="Email" name="Email"><br>
-	    	</td>
-	    </tr>
-
-	    <!-- "ID" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-				<label for="ID">ID:</label><br>
-	    	</td>
-	    	<td>
-	 			<input type="text" id="ID" name="Id"><br>
-	    	</td>
-	    </tr>
-
-	     <!-- "GPA" label and textbox -->
-	    <tr>
-	    	<td style="padding-left:10px;">
-				<label for="gpa">GPA:</label><br>
-	    	</td>
-	    	<td style="padding-bottom:10px">
-	 			<input type="text" id="gpa" name="gpa"><br>
-	    	</td>
-	    </tr>
-
-	</table>
+<!--table containing user info-->
+<table id="userInfo" style="width: 100%;">
 	<tr>
-		<td style="padding:10px;">
-			<label for="message">Supporting documents:</label>
-			<input type="file" id= "real-file"/>
-		</td>
+		<th>Name</th>
+		<th>Department</th>
+		<th>Major</th> 
+		<th>E-mail</th>
+		<th>Year</th>
+		<th>GPA</th>
 	</tr>
+	<tr>
+		<td id="Uname"></td>
+		<td id="Udep"></td>
+		<td id="Umaj"></td> 
+		<td id="Uemail"></td>
+		<td id="Uyear"></td>
+		<td id="Ugpa"></td>
+	</tr>
+	
+</table>
+<!--Additional application info-->
+<form>
+	<h4>Reference 1:</h4>
+	<p>Name:</p><input type="text" id="reference1name" />
+	<p>Phone Number:</p><input type="text" id="reference1phone" />
+	<p>E-mail:</p><input type="text" id="reference1email" />
+
+	<h4>Reference 2:</h4>
+	<p>Name:</p><input type="text" id="reference2name" />
+	<p>Phone Number:</p><input type="text" id="reference2phone" />
+	<p>E-mail:</p><input type="text" id="reference2email" />
 
 
+	<p>Supporting Documents:</p>
+	<input type="file" id="sFile"/>
 </form>
-
 <br>
-
-
 <br>
-
-<br>
-
 <hr>
-
-
 <br>
 
-<button>Submit Application</button>
+<button id='subApp'>Submit Application</button>
+
+<!--To get user info-->
+<script>
+firebase.auth().onAuthStateChanged(firebaseUser => {
+	if (firebaseUser) {
+		//document.getElementById("emailDisplay").innerHTML = firebaseUser.email;
+		// Get reference for student from database
+		let ref = firebase.database().ref('/Users/Student/' + firebaseUser.uid);
+		// Get student object
+		ref.on('value', function(studentSnapshot) {
+			let student = studentSnapshot.val();
+			document.getElementById("Uname").innerHTML = student.name;
+			document.getElementById("Udep").innerHTML = student.department;
+			document.getElementById("Umaj").innerHTML = student.degree.major;
+			document.getElementById("Uemail").innerHTML = student.email;
+			document.getElementById("Uyear").innerHTML = student.year;
+			document.getElementById("Ugpa").innerHTML = student.gpa;	
+		})
+	} 
+});
+</script>
+
+<script>
+//WHEN SUBMIT APPLICATION BUTTON IS CLICKED, ALLAPPLICATION FUNCTION IS EXECUTED//
+
+	const btnSubmitScholarship = document.getElementById('subApp');
+  	btnSubmitScholarship.addEventListener('click', e => {
+    addApplication();
+  })
+
+
+///////to add application to the database///////
+alert(1);
+function addApplication(){
+
+	//this part uploads the file into database's 'storage' section//
+
+	const ref = firebase.storage().ref('/studentDocuments')	// Tells it where to put the file
+    const file = document.querySelector("#sFile").files[0] 	// Get first element uploaded
+    const name = new Date()+ '-' + file.name        		// Get file name
+    const metadata = {contentType:file.type}
+	const task = ref.child(name).put(file,metadata)        	// Pass file and type of uploaded document
+    task
+    .then(snapshot => snapshot.ref.getDownloadURL)
+    .then(url => {
+      console.log(url)
+      alert("File uploaded successfully!")
+    })
+    .catch(console.error);
+
+	//////////////// gets scholarship ID ////////////////////
+	
+	var schID = localStorage.getItem("SchID");
+	var sRef = firebase.database().ref("Scholarships/"+schID);
+	var aRef = sRef.child("applications");
+
+	///////////// get user data ////////////////
+
+	firebase.auth().onAuthStateChanged(firebaseUser => {
+	if (firebaseUser) {
+		// Get reference for student from database
+		let ref = firebase.database().ref('/Users/Student/' + firebaseUser.uid);
+		// Get student object
+		ref.on('value', function(studentSnapshot) {
+			let student = studentSnapshot.val();
+			
+	///////// pushes application on database ///////////
+
+	var datRef = aRef.push();
+	datRef.set({
+		name: student.name,
+		department: student.department,
+		major: student.degree.major,
+		email: student.email,
+		year: student.year,
+		gpa: student.gpa,
+  		dateSubmitted: Date(),
+		reference1: document.getElementById("reference1name").value
+		//reference2: document.getElementById("ref2").value
+		//file: document.getElementById("real-file")
+	});
+})
+} 
+});
+}
+//success message
+//TO DO: MAKE THIS INTO A SEPARATE PAGE
+alert('Thanks for your application!.');
+</script>
+
+
 
 </body>
 </html>
