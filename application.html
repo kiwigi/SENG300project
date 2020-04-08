@@ -18,20 +18,22 @@
 	<link href="https://davidstutz.de/bootstrap-multiselect/docs/css/bootstrap-3.3.2.min.css" rel="stylesheet"/>
 	<link href="https://davidstutz.de/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet"/>
 	<script src="https://davidstutz.de/bootstrap-multiselect/docs/js/bootstrap-3.3.2.min.js"></script>
-	
+
 	<link rel="stylesheet" href="css/main.css">
-	
-	
+
+
 </head>
 
 <body>
 	<script src="config.js"></script>
 	<script src="app.js"></script>
+	<script src="js/guid.js"></script>
+	<script src="js/applications/applications.js"></script>
 <!---------Headers----------------------------------->
 	<h1>Scholarship Application Form</h1>
 
-	<h2 style="display:inline;">Scholarship: </h2> 
-	<h2 id="SName" style="display:inline;"></h2> 
+	<h2 style="display:inline;">Scholarship: </h2>
+	<h2 id="SName" style="display:inline;"></h2>
 	<hr style="clear:both;"/>
 
 	<h2>Student Information:</h2>
@@ -39,11 +41,12 @@
 
 <!--Gets scholarship name-->
 <script>
-	let schID = localStorage.getItem("SchID");
+	let schID = localStorage.getItem("SchID"); // TODO: schID currently returns undefined. Can also probably make schID a global const
+	console.log('schID',schID);
 	let ref = firebase.database().ref('/Scholarships/' + schID);
 	ref.on('value', function(snapshot) {
-	let sch = snapshot.val();
-	document.getElementById("SName").innerHTML = sch.name;
+		let sch = snapshot.val();
+		document.getElementById("SName").innerHTML = sch.name;
 	})
 </script>
 
@@ -52,7 +55,7 @@
 	<tr>
 		<th>Name</th>
 		<th>Department</th>
-		<th>Major</th> 
+		<th>Major</th>
 		<th>E-mail</th>
 		<th>Year</th>
 		<th>GPA</th>
@@ -60,12 +63,12 @@
 	<tr>
 		<td id="Uname"></td>
 		<td id="Udep"></td>
-		<td id="Umaj"></td> 
+		<td id="Umaj"></td>
 		<td id="Uemail"></td>
 		<td id="Uyear"></td>
 		<td id="Ugpa"></td>
 	</tr>
-	
+
 </table>
 <!--Additional application info-->
 <form>
@@ -99,78 +102,69 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 			document.getElementById("Umaj").innerHTML = student.degree.major;
 			document.getElementById("Uemail").innerHTML = student.email;
 			document.getElementById("Uyear").innerHTML = student.year;
-			document.getElementById("Ugpa").innerHTML = student.gpa;	
+			document.getElementById("Ugpa").innerHTML = student.gpa;
 		})
-	} 
+	}
 });
 </script>
 
 <script>
-//WHEN SUBMIT APPLICATION BUTTON IS CLICKED, ALLAPPLICATION FUNCTION IS EXECUTED//
-
-	const btnSubmitScholarship = document.getElementById('subApp');
-  	btnSubmitScholarship.addEventListener('click', e => {
-	addApplication();
-	//success message
-	//TO DO: MAKE THIS INTO A SEPARATE PAGE
-	alert('Thanks for your application!.');
-  })
-
-
-///////to add application to the database///////
-
-function addApplication(){
-
-	//this part uploads the file into database's 'storage' section//
-
-	const ref = firebase.storage().ref('/studentDocuments')	// Tells it where to put the file
-    const file = document.querySelector("#sFile").files[0] 	// Get first element uploaded
-    const name = new Date()+ '-' + file.name        		// Get file name
-    const metadata = {contentType:file.type}
-	const task = ref.child(name).put(file,metadata)        	// Pass file and type of uploaded document
-    task
-    .then(snapshot => snapshot.ref.getDownloadURL)
-    .then(url => {
-      console.log(url)
-    })
-    .catch(console.error);
-
-	//////////////// gets scholarship ID ////////////////////
-	
-	var schID = localStorage.getItem("SchID");
-	var sRef = firebase.database().ref("Scholarships/"+schID);
-	var aRef = sRef.child("applications");						//application ref
-
-	///////////// get user data ////////////////
-
-	firebase.auth().onAuthStateChanged(firebaseUser => {
-	if (firebaseUser) {
-		// Get reference for student from database
-		let ref = firebase.database().ref('/Users/Student/' + firebaseUser.uid);
-		// Get student object
-		ref.on('value', function(studentSnapshot) {
-			let student = studentSnapshot.val();
-			
-	///////// pushes application on database ///////////
-
-	var datRef = aRef.push();
-	datRef.set({
-		name: student.name,
-		department: student.department,
-		major: student.degree.major,
-		email: student.email,
-		year: student.year,
-		gpa: student.gpa,
-		dateSubmitted: Date(),
-		nameOfReference: document.getElementById("reference1name").value,
-		phoneOfReference: document.getElementById("reference1phone").value,
-		emailOfReference: document.getElementById("reference1email").value
-	});
+const btnSubmitScholarship = document.getElementById('subApp');
+btnSubmitScholarship.addEventListener('click', e => {
+    addApplication();
 })
-} 
-});
-}
 
+/**
+ * Adds application to the database. First checks to see if student has already applied to the scholarship before.
+*/
+function addApplication() {
+    // Uploads the file into database's 'storage' section
+    const ref = firebase.storage().ref('/studentDocuments') // Tells it where to put the file
+    const file = document.querySelector("#sFile").files[0] // Get first element uploaded
+    const name = new Date() + '-' + file.name // Get file name
+    const metadata = {
+        contentType: file.type
+    }
+    const task = ref.child(name).put(file, metadata) // Pass file and type of uploaded document
+    task
+        .then(snapshot => snapshot.ref.getDownloadURL)
+        .then(url => console.log(url))
+        .catch(console.error);
+
+    // Get Scholarship ID
+    var schID = localStorage.getItem("SchID");
+    var sRef = firebase.database().ref("Scholarships/" + schID);
+    var aRef = sRef.child("applications"); // application ref
+
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+					checkIfApplicationAlreadyExists('610e6a8c-054c-cf7a-036a-22ba7a1e60fd', firebaseUser.uid) // TODO: Replace first parameter with schID
+						.then( alert("Error: You have already applied for this application.") )
+						.catch(e => {
+							let ref = firebase.database().ref('/Applications/' + guid()); // Get reference for application section from database
+							let uid = guid(); // Create a unique ID for this application (will be the key in the database)
+							firebase.database().ref("Applications/"+uid).set({
+								appliedBy: firebaseUser.uid,
+								dateApplied: Date(),
+								documentURL: null, // TODO: Make this a link or ID to the document the student has uploaded
+								reference: {
+									name: document.getElementById("reference1name").value,
+									phone: document.getElementById("reference1phone").value,
+									email: document.getElementById("reference1email").value
+								},
+								scholarshipId: '610e6a8c-054c-cf7a-036a-22ba7a1e60fd', // TODO: Replace with schID
+								status: {
+									awarded: false,
+									dateReviewed: null,
+									reviewed: false
+								}
+							})
+							// TODO: MAKE THIS INTO A SEPARATE PAGE
+					    alert('Thanks for your application!');
+						});
+        }
+    });
+}
 </script>
 
 
