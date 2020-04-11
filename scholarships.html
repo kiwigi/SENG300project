@@ -118,6 +118,8 @@
                             // Check if student has valid degree and GPA for scholarship
                             if (checkIfDegreeValid(scholarship, student) && checkIfGPAValid(scholarship, student)) {
                                 console.log("Student has appropriate major/minor and GPA for scholarship.");
+                                //store scholarship ID for application use
+                                localStorage.setItem("SchID", scholarshipId);
                                 // Redirect user to apply page
                                 window.location = "application.html";
                             } else {
