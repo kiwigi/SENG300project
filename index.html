@@ -1,76 +1,95 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <meta name="description" content="" />
-  <meta name="keywords" content="" />
-    <title>HOME</title>
+<html lang="en">
 
-    <!-- Scripts for Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
-
-    <!-- Scripts for Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
-    <!-- Scripts for FontAwesome -->
-    <script src="https://use.fontawesome.com/9c5fe71092.js"></script>
-
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/panel.css">
-</head>
+<!-- Source for colours and styles -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<link rel="stylesheet" href="css/style.css">
 
 <body>
 
-      <!-- NAVBAR -->
-      <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="index.html"><i class="fa fa-university" aria-hidden="true"></i> Scholarship App</a> </a>
-        </div>
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme-d5 w3-card">
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <p style="text-align:center">Scholarships.co </p>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-            <li><a href="scholarships.html">Scholarships</a></li>
-            <li><a href="account.html">Account</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-    <div id="userInfo">
-      <span class="glyphicon glyphicon-user"></span><span id="userEmail"></span>
-      <button id="btnLogout" class="btn btn-action">Log Out</button>
+    <a href="index.html" class="w3-bar-item w3-button w3-padding-large">Home</a>
+    <a href="scholarships.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Scholarships</a>
+    <div class="w3-dropdown-hover w3-hide-small">
+      <a href="account.html"><button class="w3-padding-large w3-button" title="My Account">My Account <i class="fa fa-caret-down"></i></button></a>   
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="account.html" class="w3-bar-item w3-button">View Account</a>
+        <!--logout action**-->
+        <a href="#" class="w3-bar-item w3-button">Logout</a>
+      </div>
     </div>
+    <a href="javascript:void(0)" class="w3-padding-large w3-theme-d5 w3-hide-small w3-right"><i class="fa fa-search"></i></a>
+  </div>
+</div>
 
-    <script src="config.js"></script>
-    <script src="app.js"></script>
-    <script src="js/users/userTools.js"></script>
-    <script src="js/panels/panelTypes.js"></script>
-    <script src="js/panels/indexPanel.js"></script>
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-theme-d5 w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-theme-d5 w3-margin-right" onclick="w3_open()">☰</a>
+  <span>Scholarships.co</span>
+</header>
 
-    <div id= "center">
-        <h1>Home</h1>
-        <h2 id="portalType"></h2>
-        <p id='userType'></p><br>
-        <div id="panels" class="row">
-        </div>
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="showcase">
+    <h1 class="w3-jumbo"><b>Scholarships.co</b></h1>
+    <h1 class="w3-xlarge w3-text-d5"><i>a place to easily access scholarships.</i></h1>
+  </div>
+  
+  <!-- About us -->
+  <div class="w3-container" id="about-us" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-d4"><b>About us.</b></h1>
+    <hr style="width:50px;border:5px solid #456f93" class="w3-round">
+    <p>Compelete this paragraph</p>
+    <p>Complete this second paragraph 
+    </p>
+  </div>
+  
+  <!-- Image header -->
+  <div class="w3-display-container w3-container container">
+    <img class="image" src="ti-students.png" alt="Students" style="width:100%">
+    <div class="w3-display-bottomleft" style="padding:24px 48px">
+      <p><a href="scholarships.html" class="w3-button w3-theme-l1 w3-padding-large w3-large">View Available Scholarships</a></p>
     </div>
+  </div>
+  
+
+
+<!-- End page content -->
+</div>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+</script>
 
 </body>
-
 </html>
