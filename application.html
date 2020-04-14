@@ -138,7 +138,7 @@ function addApplication() {
 
     firebase.auth().onAuthStateChanged(firebaseUser => {
         if (firebaseUser) {
-					checkIfApplicationAlreadyExists('610e6a8c-054c-cf7a-036a-22ba7a1e60fd', firebaseUser.uid) // TODO: Replace first parameter with schID
+					checkIfApplicationAlreadyExists(schID, firebaseUser.uid)
 						.then( alert("Error: You have already applied for this application.") )
 						.catch(e => {
 							let ref = firebase.database().ref('/Applications/' + guid()); // Get reference for application section from database
