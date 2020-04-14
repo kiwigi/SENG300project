@@ -71,7 +71,7 @@
 
     <script src="config.js"></script>
     <script src="app.js"></script>
-
+    <script src="js/applications/applications.js"></script>
     <script>
         /**
          * Checks to see if student's degree matches scholarship's eligible degrees
@@ -118,10 +118,36 @@
                             // Check if student has valid degree and GPA for scholarship
                             if (checkIfDegreeValid(scholarship, student) && checkIfGPAValid(scholarship, student)) {
                                 console.log("Student has appropriate major/minor and GPA for scholarship.");
-                                //store scholarship ID for application use
-                                localStorage.setItem("SchID", scholarshipId);
-                                // Redirect user to apply page
-                                window.location = "application.html";
+
+                                /* TODO: Check if this works entirely */
+
+                                getStudentApplications(firebaseUser.uid).then(applications => {
+                                  if (Object.keys(applications).length< 5) {
+                                    let alreadyApplied = false;
+                                    for (var key in applications){
+                                      if (scholarshipId == applications[key]) {
+                                        alreadyApplied = true;
+                                      }
+                                    }
+                                    if (alreadyApplied == false) {
+                                      // Student has applied to less than 5 scholarships
+                                      // Store scholarship ID for application use
+                                      localStorage.setItem("SchID", scholarshipId);
+                                      // Redirect user to apply page
+                                      window.location = "application.html";
+                                    } else {
+                                      alert("You have already applied to this scholarship.")
+                                    }
+                                  } else {
+                                    // Student has already applied to 5 scholarships; cannot apply to more
+                                    alert("Already applied to 5 scholarships.")
+                                  }
+                                })
+                                .catch(e => console.log(e));
+
+                                /* */
+
+
                             } else {
                                 alert("Invalid degree or GPA not high enough.")
                             }
