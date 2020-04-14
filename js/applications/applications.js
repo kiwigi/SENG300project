@@ -1,4 +1,60 @@
 /**
+ * Checks to see if a scholarship application has already been awarded to a student
+ * @param {String} studentId The student's unique ID
+ * @return {Promise} Nothing if scholarship has not been awarded, the application object if the scholarship has been awarded
+*/
+function checkIfStudentAwardedScholarship(studentId) {
+  return new Promise((resolve, reject) => {
+    let awarded = false;
+    firebase.database().ref('/Applications').once('value', function(snapshot) {
+      snapshot.forEach(childSnapshot =>
+      {
+        let application = childSnapshot.val();
+        if (application.appliedBy == studentId) {
+          if (application.status.awarded == true) {
+            awarded = application;
+          }
+        }
+      })
+
+      return (awarded == false) ? (resolve()) : reject(awarded);
+
+    })
+  });
+}
+
+checkIfStudentAwardedScholarship('dLqEPcNkmgQGKL1U2VSJm8CkZjP2').then(u => console.log('student has not been awarded a scholarship',u))
+                                                            .catch(e => console.log(e));
+
+/**
+ * Returns a list of application IDs for a given student
+ * @param {String} studentId The student's unique ID
+ * @return {Promise} List of student application IDs if any exist
+*/
+function getStudentApplications(studentId) {
+  return new Promise((resolve, reject) => {
+    let studentApplicationIds = {};
+    firebase.database().ref('/Applications').once('value', function(snapshot) {
+      snapshot.forEach(childSnapshot =>
+      {
+        let application = childSnapshot.val();
+        if (studentId == application.appliedBy) {
+          studentApplicationIds[childSnapshot.key] = application.scholarshipId;
+        }
+      })
+
+      return (Object.keys(studentApplicationIds).length > 0) ? (resolve(studentApplicationIds)) : reject("Error: Student does not seem to have any applications.");
+
+    })
+  });
+}
+
+getStudentApplications('dLqEPcNkmgQGKL1U2VSJm8CkZjP2').then(u => console.log('student has applied',u))
+                                                            .catch(e => alert(e));
+
+
+
+/**
  * Returns true if student has already applied to scholarship
  * @param {String} scholarshipId The scholarship's unique ID
  * @param {String} studentId The student's unique ID
