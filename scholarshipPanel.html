@@ -40,19 +40,18 @@
     <p>GPA Requirement: <input type="number" step="0.1" min="0.0" max="4.0" placeholder="0.0" id="gpaField" /></p>
 
     <label for="degrees">Degree Availability:</label>
-
     <form id="form1">
+      <div style="padding:20px">
+        <select id="degrees" multiple="multiple"></select>
+      </div>
+    </form>
 
-    <div style="padding:20px">
-
-    <select id="degrees" multiple="multiple"></select>
-
-    <br/><br/>
-
+    <label for="coordinator">Assigned Coordinator:</label>
+    <form id="form1">
+      <div style="padding:20px">
+        <select id="coordinator"></select>
+      </div>
     <!-- <input type="button" id="btnget" value="Get Selected Values" /> -->
-
-    </div>
-
     </form>
 
     <!-- <select id="degrees2">
@@ -109,6 +108,30 @@
       });
     }
     getDegrees();
+
+    function getCoordinators() {
+      firebase.database().ref('/Users/Coordinator').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot)
+        {
+          let childKey = childSnapshot.key;
+          let childData = childSnapshot.val();
+          var htm = '';
+          htm += '<option value="' + childKey + '">' + childData['name'] + '</option>';
+          $('#coordinator').append(htm);
+          $('#coordinator').multiselect('rebuild');
+        })
+      })
+
+      $(function() {
+          $('#coordinator').multiselect({
+              includeSelectAllOption: true
+          });
+          $('#btnget').click(function(){
+              console.log($('#coordinator').val());
+          });
+      });
+    }
+    getCoordinators()
     </script>
 
     <script src="js/panels/scholarshipPanel.js"></script>
