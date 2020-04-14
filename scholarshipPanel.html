@@ -30,6 +30,7 @@
 <body>
     <script src="js/guid.js"></script>
     <script src="config.js"></script>
+    <script src="js/users/userTools.js"></script>
 
     <h1>Scholarship Panel</h1>
 
@@ -65,6 +66,18 @@
     <p id="data"></p>
 
     <script>
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+      if (firebaseUser) {
+        // Check if account type = Admin (Required to be able to access this page)
+        getUserObject(firebaseUser.uid).then(accountObj => {
+          // If account type != Admin, redirect to index.html
+          if(accountObj.accountType != 'Admin'){
+            window.location = "index.html";
+          }
+        });
+      }
+    });
+
     function getDegrees() {
       firebase.database().ref('/Degrees').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot)
