@@ -43,7 +43,7 @@ function getStudentApplications(studentId) {
         }
       })
 
-      return (Object.keys(studentApplicationIds).length > 0) ? (resolve(studentApplicationIds)) : reject("Error: Student does not seem to have any applications.");
+      return (Object.keys(studentApplicationIds).length >= 0) ? (resolve(studentApplicationIds)) : reject("Error: Student does not seem to have any applications.");
 
     })
   });
