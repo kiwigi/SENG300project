@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <meta name="description" content="" />
   <meta name="keywords" content="" />
-    <title>Account</title>
+    <title>Coordinator Panel</title>
 
     <!-- Scripts for Firebase -->
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
@@ -27,6 +27,8 @@
 <body>
       <script src="config.js"></script>
       <script src="js/applications/applications.js"></script>
+      <script src="js/users/userTools.js"></script>
+      <script src="js/scholarships/scholarshipTools.js"></script>
 
       <!-- NAVBAR -->
       <nav class="navbar navbar-default">
@@ -47,7 +49,7 @@
           <ul class="nav navbar-nav">
             <li><a href="index.html">Home</a></li>
             <li><a href="scholarships.html">Scholarships</a></li>
-            <li class="active"><a href="#">Account <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="account.html">Account</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -59,26 +61,125 @@
         <h2>Scholarships To Review</h2>
 
         <span id="testDisplay">test</span>
+
+        <div id="panels" class="row">
+        </div>
     </div>
 
     <script>
+      function reviewScholarship(applicationId, studentId, choice){
+        if (choice === 'accept') {
+            if (confirm("Please Confirm: You are about to award the scholarship 'ScholarshipName' for $'ScholarshipAmount' to 'StudentName'.")) { // TODO: Get correct variables
+                checkIfStudentAwardedScholarship(studentId).then(u => {
+                  // Student has not been awarded a scholarship yet. Student may apply.
+                  let appUpdates = {};
+                  let appRef = '/Applications/'+applicationId;
+                  // Set status of application to 'awarded : true; reviewed : true; dataReviewed : Date()'
+                  appUpdates[appRef+'/status/awarded'] = true;
+                  appUpdates[appRef+'/status/reviewed'] = true;
+                  appUpdates[appRef+'/status/dateReviewed'] = Date();
+                  firebase.database().ref().update(appUpdates);
+                })
+                .catch(e => alert("Error: Student has already been awarded a scholarship."));
+            } else {
+                alert("Scholarship has not been awarded.")
+            }
+        } else if (choice === 'reject') {
+            // Student has not been awarded a scholarship yet. Student may apply.
+            let appUpdates = {};
+            let appRef = '/Applications/'+applicationId;
+            // Set status of application to 'awarded : false; reviewed : true; dataReviewed : Date()'
+            appUpdates[appRef+'/status/reviewed'] = true;
+            appUpdates[appRef+'/status/dateReviewed'] = Date();
+            firebase.database().ref().update(appUpdates);
+            alert("Application has been rejected.")
+        }
+      }
 
-
+      /**
+       * Displays information about applications / scholarships on the page
+       */
       function displayInfo() {
+        /**
+         * Represents a callback function to be used when calling `getAllApplicationsForCoordinator()`
+         * @param {Object} args The applications object
+         */
+        function cb(args) {
+          document.getElementById("testDisplay").innerHTML = 'test ' + args; // TODO: Remove this line...
 
-        function cb(arg) {
-          console.log('arg',arg)
-          document.getElementById("testDisplay").innerHTML = arg;
+          args.forEach( (arg, i) => {
+            let ref = firebase.database().ref('/Applications/' + arg);
+            ref.on('value', function(snapshot) {
+              let app = snapshot.val();
+              // First check to see if scholarship has been reviewed already
+              if(app.status.reviewed == false) {
+                  let divName = 'userInfo'+i;
+                  let divScholarshipName = 'scholarship'+i;
+                  let divReviewName = 'review'+i;
+                  let tmp = '';
+                  tmp += '<div class="col-md-4 col-sm-4">';
+                  tmp += '    <div class="application-info">';
+                  tmp += '<div id="'+divScholarshipName+'"></div>'
+                  tmp += '<div id="'+divName+'"></div>'
+                  tmp += '      <p><i id="ic" class="fa fa-calendar" aria-hidden="true"></i> <b>Date Applied:</b> ' + app['dateApplied'] + '</p>';
+                  tmp += '      <p><i id="ic" class="fa fa-users" aria-hidden="true"></i> <b>Reference:</b></p>';
+                  tmp += '        <ul>';
+                  tmp += '          <li>Name: '+app['reference']['name']+'</li>';
+                  tmp += '          <li>Email: '+app['reference']['email']+'</li>';
+                  tmp += '          <li>Phone: '+app['reference']['phone']+'</li>';
+                  tmp += '        </ul>';
+                  tmp += '    </div>';
+                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'accept\')">Award Scholarship</button></div>'
+                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'reject\')">Reject Application</button></div>'
+                  tmp += '</div>';
+                  $('#panels').prepend(tmp);
+
+                  let scholarship = getScholarshipObject(app['scholarshipId']).then( scholarshipInfo => {
+                                                        let schTmp = '';
+                                                        schTmp += '<h3><svg class="bi bi-award" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.669.864L8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193l-1.51-.229L8 1.126l-1.355.702-1.51.229-.684 1.365-1.086 1.072L3.614 6l-.25 1.506 1.087 1.072.684 1.365 1.51.229L8 10.874l1.356-.702 1.509-.229.684-1.365 1.086-1.072L12.387 6l.248-1.506-1.086-1.072-.684-1.365z" clip-rule="evenodd"/><path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z"/></svg> Scholarship: ' + scholarshipInfo['name'] + '</h3>';
+                                                        schTmp += '      <ul>'
+                                                        schTmp += '        <li> Scholarship Description: '+scholarshipInfo['description']+'</li>'
+                                                        schTmp += '        <li> Amount: $'+scholarshipInfo['amount']+'</li>'
+                                                        schTmp += '      </ul>'
+                                                        $('#'+divScholarshipName).prepend(schTmp);
+                                                    })
+                                                    .catch(e => console.log(e));
+
+                  let student = getUserObject(app['appliedBy']).then( userInfo => {
+                                                        console.log('userInfo',userInfo);
+                                                        let userTmp = '';
+                                                        userTmp += '      <p><i id="ic" class="fa fa-user" aria-hidden="true"></i> <b>Applied By:</b> ' + userInfo['name'] + ' ('+userInfo['email']+')</p>';
+                                                        userTmp += '      <ul>'
+                                                        userTmp += '        <li>Department: ' + userInfo['department'] + '</li>'
+                                                        userTmp += '        <li>GPA: ' + userInfo['gpa'] + '</li>'
+                                                        userTmp += '        <li>Major: ' + userInfo['degree']['major'] + '</li>'
+                                                        userTmp += '        <li>Minor: ' + userInfo['degree']['minor'] + '</li>'
+                                                        userTmp += '        <li>Graduate Type: ' + userInfo['graduateType'] + '</li>'
+                                                        userTmp += '        <li>Year: ' + userInfo['year'] + '</li>'
+                                                        userTmp += '      </ul>'
+                                                        $('#'+divName).prepend(userTmp);
+                                                    })
+                                                    .catch(e => console.log(e));
+
+              } // End of `if` statement
+
+            })
+          });
         }
 
         firebase.auth().onAuthStateChanged(firebaseUser => {
         	if (firebaseUser) {
-            console.log(firebaseUser.uid);
-        		//document.getElementById("emailDisplay").innerHTML = firebaseUser.email;
+            // Check if account type = Coordinator (Required to be able to access this page)
+            getUserObject(firebaseUser.uid).then(accountObj => {
+              // If account type != Coordinator, redirect to index.html
+              if(accountObj.accountType != 'Coordinator'){
+                window.location = "index.html";
+              }
+            });
+            // Get all applications for context coordinator and pass a callback function
             getAllApplicationsForCoordinator(firebaseUser.uid, cb)
         	}
         });
-
       }
 
       displayInfo();
