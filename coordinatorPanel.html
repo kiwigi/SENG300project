@@ -67,7 +67,7 @@
     </div>
 
     <script>
-      function reviewScholarship(applicationId, studentId, choice){
+      function reviewScholarship(scholarshipId, applicationId, studentId, choice){
         if (choice === 'accept') {
             if (confirm("Please Confirm: You are about to award the scholarship 'ScholarshipName' for $'ScholarshipAmount' to 'StudentName'.")) { // TODO: Get correct variables
                 checkIfStudentAwardedScholarship(studentId).then(u => {
@@ -79,6 +79,19 @@
                   appUpdates[appRef+'/status/reviewed'] = true;
                   appUpdates[appRef+'/status/dateReviewed'] = Date();
                   firebase.database().ref().update(appUpdates);
+
+                  getUserObject(studentId)
+                    .then(student => {
+                      getScholarshipObject(scholarshipId)
+                        .then(scholarship => {
+
+                            /* Call function here */
+                            sendEmail(student, scholarship.name)
+
+                        })
+                        .catch(e => console.log(e));
+                    })
+                    .catch(e => console.log(e));
                 })
                 .catch(e => alert("Error: Student has already been awarded a scholarship."));
             } else {
@@ -129,8 +142,8 @@
                   tmp += '          <li>Phone: '+app['reference']['phone']+'</li>';
                   tmp += '        </ul>';
                   tmp += '    </div>';
-                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'accept\')">Award Scholarship</button></div>'
-                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'reject\')">Reject Application</button></div>'
+                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+app['scholarshipId']+'\',\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'accept\')">Award Scholarship</button></div>'
+                  tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+app['scholarshipId']+'\',\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'reject\')">Reject Application</button></div>'
                   tmp += '</div>';
                   $('#panels').prepend(tmp);
 
