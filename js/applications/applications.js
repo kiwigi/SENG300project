@@ -115,7 +115,7 @@ function getApplicationsForScholarship(scholarshipId) {
         }
       })
 
-      return (scholarshipApplications.length > 0) ? (resolve(scholarshipApplications)) : reject("Error: Application not in 'Applications/' database.");
+      return (scholarshipApplications.length >= 0) ? (resolve(scholarshipApplications)) : reject("Error: Application not in 'Applications/' database.");
 
     })
   });
