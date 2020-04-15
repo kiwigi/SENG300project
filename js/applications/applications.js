@@ -134,6 +134,34 @@ function getApplicationsForScholarship(scholarshipId) {
 getApplicationsForScholarship('610e6a8c-054c-cf7a-036a-22ba7a1e60fd').then(u => printObject(u)) // uid should be firebaseUser.uid
                                                             .catch(e => alert(e));
 
+
+
+// /**
+//  * Forms a list of all application IDs for all scholarships for a given coordinator ID
+//  * Then uses a callback to do something specific with this list
+//  * @param {String} coordinatorId The coordinator's unique ID
+//  * @param {Function} callback The callback function to utilize the list of application IDs as an argument
+// */
+// function getAllApplicationsForCoordinator(coordinatorId, callback) {
+//   let applicationIds = [];
+//   getAssignedScholarships(coordinatorId)
+//     .then(scholarshipIds => {
+//                   console.log('scholarshipIds',scholarshipIds);
+//                   scholarshipIds.forEach( scholarshipId => {
+//                       getApplicationsForScholarship(scholarshipId)
+//                         .then( applications => {
+//                             applicationIds.push(applications);
+//                             console.log('applicationIds array',applicationIds);
+//                             console.log('applications',applications);
+//                             callback(applications)
+//                         })
+//                         .catch(e => console.log(e));
+//                   })
+//                })
+//     .catch(e => console.log(e));
+//
+// }
+
 /**
  * Forms a list of all application IDs for all scholarships for a given coordinator ID
  * Then uses a callback to do something specific with this list
@@ -141,16 +169,27 @@ getApplicationsForScholarship('610e6a8c-054c-cf7a-036a-22ba7a1e60fd').then(u => 
  * @param {Function} callback The callback function to utilize the list of application IDs as an argument
 */
 function getAllApplicationsForCoordinator(coordinatorId, callback) {
+  let applicationIds = [];
+  let promises = [];
   getAssignedScholarships(coordinatorId)
     .then(scholarshipIds => {
+                  console.log('scholarshipIds',scholarshipIds);
                   scholarshipIds.forEach( scholarshipId => {
-                      getApplicationsForScholarship(scholarshipId)
-                        .then( applications => {
-                            console.log('applicationIds',applications);
-                            callback(applications)
-                        })
-                        .catch(e => console.log(e));
+                      promises.push(
+                          getApplicationsForScholarship(scholarshipId)
+                            .then( applications => {
+                                applicationIds.push(applications);
+                            })
+                            .catch(e => console.log(e))
+                      );
                   })
+
+                  Promise.all(promises).then(() => {
+                    let applications = applicationIds.flat();
+                    console.log('applications final',applications);
+                    callback(applications);
+                  })
+
                })
     .catch(e => console.log(e));
 
