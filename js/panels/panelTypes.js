@@ -33,7 +33,7 @@ const panelTypes = {
         "p" : "Apply to various scholarships."
       },
       1 : {
-        "href" : "index.html",
+        "href" : "studentApplications.html",
         "h3" : "My Applications",
         "ic-class" : "fa fa-file fa-5x",
         "p" : "View your current scholarship applications."
@@ -57,7 +57,7 @@ const panelTypes = {
         "p" : "View current available scholarships."
       },
       1 : {
-        "href" : "index.html",
+        "href" : "professorHub.html",
         "h3" : "Nominate Students",
         "ic-class" : "fa fa-star fa-5x",
         "p" : "Nominate students for a scholarship."
@@ -81,7 +81,7 @@ const panelTypes = {
         "p" : "View current available scholarships."
       },
       1 : {
-        "href" : "index.html",
+        "href" : "coordinatorPanel.html",
         "h3" : "Review Applications",
         "ic-class" : "fa fa-list fa-5x",
         "p" : "Review current pending scholarship applications."
