@@ -34,9 +34,9 @@ function incrementScholarshipStats(uid, choice) {
           case 'accept':
             section = 'numAccepted';
             try {
-              updates[schRef+'/stats/numReviewed'] = scholarship.stats[section] + 1;
+              updates[schRef+'/stats/numReviewed'] = scholarship.stats['numReviewed'] + 1;
             } catch(err) {
-              updates[schRef+'/stats/numReviewed'+section] = 1;
+              updates[schRef+'/stats/numReviewed'] = 1;
             }
             break;
           case 'review':
