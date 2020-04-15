@@ -154,11 +154,9 @@ function getApplicationsForScholarship(scholarshipId) {
  * @param {Function} callback The callback function to utilize the list of application IDs as an argument
 */
 function getAllApplicationsForCoordinator(coordinatorId, callback) {
-  let applicationIds = [];
-  let promises = [];
+  let applicationIds = [], promises = [];
   getAssignedScholarships(coordinatorId)
     .then(scholarshipIds => {
-                  console.log('scholarshipIds',scholarshipIds);
                   scholarshipIds.forEach( scholarshipId => {
                       promises.push(
                           getApplicationsForScholarship(scholarshipId)
@@ -168,16 +166,12 @@ function getAllApplicationsForCoordinator(coordinatorId, callback) {
                             .catch(e => console.log(e))
                       );
                   })
-
                   Promise.all(promises).then(() => {
                     let applications = applicationIds.flat();
-                    console.log('applications final',applications);
                     callback(applications);
                   })
-
                })
     .catch(e => console.log(e));
-
 }
 
 
