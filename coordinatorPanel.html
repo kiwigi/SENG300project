@@ -127,8 +127,6 @@
          * @param {Object} args The applications object
          */
         function cb(args) {
-          document.getElementById("testDisplay").innerHTML = 'test ' + args; // TODO: Remove this line...
-
           args.forEach( (arg, i) => {
             console.log('i',i);
             let ref = firebase.database().ref('/Applications/' + arg);

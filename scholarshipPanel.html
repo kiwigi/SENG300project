@@ -31,8 +31,8 @@
     <script src="js/guid.js"></script>
     <script src="config.js"></script>
     <script src="js/users/userTools.js"></script>
-    <script src="js/panels/scholarshipPanel.js"></script>
-    
+
+
     <h1>Scholarship Panel</h1>
 
     <p>Scholarship Name: <input type="text" placeholder="scholarship" id="scholarshipField" /></p>
@@ -58,7 +58,7 @@
 
     <button id="submitScholarship">Submit</button>
     <p id="data"></p>
-
+    <script src="js/panels/scholarshipPanel.js"></script>
     <script>
       firebase.auth().onAuthStateChanged(firebaseUser => {
         if (firebaseUser) {
