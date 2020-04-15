@@ -2,7 +2,7 @@
 
 ## Overview
 
-The following is a scholarship web application, primarily to be used by students to apply to various scholarships.
+The following is a scholarship web application with user authentication, primarily to be used by students to apply to various scholarships.
 
 There are four different types of accounts with different permissions:
 
