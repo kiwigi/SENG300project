@@ -57,7 +57,7 @@ const panelTypes = {
         "p" : "View current available scholarships."
       },
       1 : {
-        "href" : "index.html",
+        "href" : "professorHub.html",
         "h3" : "Nominate Students",
         "ic-class" : "fa fa-star fa-5x",
         "p" : "Nominate students for a scholarship."
@@ -75,10 +75,10 @@ const panelTypes = {
     "numPanels" : 3,
     "panels" : {
       0 : {
-        "href" : "scholarships.html",
-        "h3" : "View Scholarships",
+        "href" : "stats.html",
+        "h3" : "View Scholarship Stats",
         "ic-class" : "fa fa-clipboard fa-5x",
-        "p" : "View current available scholarships."
+        "p" : "View current available scholarships and statistics about them."
       },
       1 : {
         "href" : "coordinatorPanel.html",
