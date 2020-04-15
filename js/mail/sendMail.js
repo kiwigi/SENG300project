@@ -1,4 +1,4 @@
-<script src="https://smtpjs.com/v3/smtp.js">
+<script src="https://smtpjs.com/v3/smtp.js"></script>
 function sendAccepted(student,scholarshipName) {
     Email.send({
     Host: "smtp.gmail.com",
@@ -26,4 +26,4 @@ function sendDeclined(student, scholarshipName) {
         message => alert("mail sent successfully")
     );
 }
-</script>
+
