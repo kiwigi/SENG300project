@@ -51,87 +51,27 @@
       <div style="padding:20px">
         <select id="coordinator"></select>
       </div>
-    <!-- <input type="button" id="btnget" value="Get Selected Values" /> -->
     </form>
 
-    <!-- <select id="degrees2">
-      <option value="all">All Degrees</option>
-    </select> -->
-
     <p>Description: <br/> <textarea id="descField" rows="4" cols="50">Enter the description of the scholarship.</textarea></p>
-
 
     <button id="submitScholarship">Submit</button>
     <p id="data"></p>
 
     <script>
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-      if (firebaseUser) {
-        // Check if account type = Admin (Required to be able to access this page)
-        getUserObject(firebaseUser.uid).then(accountObj => {
-          // If account type != Admin, redirect to index.html
-          if(accountObj.accountType != 'Admin'){
-            window.location = "index.html";
-          }
-        });
-      }
-    });
-
-    function getDegrees() {
-      firebase.database().ref('/Degrees').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot)
-        {
-          let childKey = childSnapshot.key;
-          let childData = childSnapshot.val();
-
-          // let degreeSection = document.getElementById("degrees");
-          // let option = document.createElement("option");
-          // option.value = childKey;
-          // option.text = childData['name'];
-          // degreeSection.add(option);
-
-          var htm = '';
-          htm += '<option value="' + childKey + '">' + childData['name'] + '</option>';
-          $('#degrees').append(htm);
-          $('#degrees').multiselect('rebuild');
-
-        })
-      })
-
-      $(function() {
-          $('#degrees').multiselect({
-              includeSelectAllOption: true
+      firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+          // Check if account type = Admin (Required to be able to access this page)
+          getUserObject(firebaseUser.uid).then(accountObj => {
+            // If account type != Admin, redirect to index.html
+            if(accountObj.accountType != 'Admin'){
+              window.location = "index.html";
+            }
           });
-          $('#btnget').click(function(){
-              console.log($('#degrees').val());
-          });
+        }
       });
-    }
-    getDegrees();
-
-    function getCoordinators() {
-      firebase.database().ref('/Users/Coordinator').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot)
-        {
-          let childKey = childSnapshot.key;
-          let childData = childSnapshot.val();
-          var htm = '';
-          htm += '<option value="' + childKey + '">' + childData['name'] + '</option>';
-          $('#coordinator').append(htm);
-          $('#coordinator').multiselect('rebuild');
-        })
-      })
-
-      $(function() {
-          $('#coordinator').multiselect({
-              includeSelectAllOption: true
-          });
-          $('#btnget').click(function(){
-              console.log($('#coordinator').val());
-          });
-      });
-    }
-    getCoordinators()
+      getDegrees();
+      getCoordinators();
     </script>
 
     <script src="js/panels/scholarshipPanel.js"></script>
