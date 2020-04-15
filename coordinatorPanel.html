@@ -29,6 +29,34 @@
       <script src="js/applications/applications.js"></script>
       <script src="js/users/userTools.js"></script>
       <script src="js/scholarships/scholarshipTools.js"></script>
+      <script src="https://smtpjs.com/v3/smtp.js"></script>
+
+      <script>
+      // Functions for sending appropriate email
+      function sendAccepted(student,scholarshipName) {
+          Email.send({
+          SecureToken: "2a5bf216-297c-4d8c-aef4-04ec7984d0d9",
+          To : ''+student.email,                                 // Email
+          From : "scholarship.admin@scholarships.com",
+          Subject : "Congratulations "+student.name+"!",
+          Body : "You've been accepted for the scholarship "+scholarshipName,
+          }).then(
+              message => alert("mail sent successfully")
+          );
+      }
+
+      function sendDeclined(student, scholarshipName) {
+          Email.send({
+          SecureToken: "2a5bf216-297c-4d8c-aef4-04ec7984d0d9",
+          To : ''+student.email,                              // Email            
+          From : "scholarship.admin@scholarships.com",
+          Subject : "Sorry "+name+"!",
+          Body : "You've been declined for the scholarship "+scholarshipName,
+          }).then(
+              message => alert("mail sent successfully")
+          );
+      }
+      </script>
 
       <!-- NAVBAR -->
       <nav class="navbar navbar-default">
@@ -69,38 +97,37 @@
     <script>
       function reviewScholarship(scholarshipId, applicationId, studentId, choice){
         if (choice === 'accept') {
-            if (confirm("Please Confirm: You are about to award the scholarship 'ScholarshipName' for $'ScholarshipAmount' to 'StudentName'.")) { // TODO: Get correct variables
-                checkIfStudentAwardedScholarship(studentId).then(u => {
-                  // Student has not been awarded a scholarship yet. Student may apply.
-                  let appUpdates = {};
-                  let appRef = '/Applications/'+applicationId;
-                  // Set status of application to 'awarded : true; reviewed : true; dataReviewed : Date()'
-                  appUpdates[appRef+'/status/awarded'] = true;
-                  appUpdates[appRef+'/status/reviewed'] = true;
-                  appUpdates[appRef+'/status/dateReviewed'] = Date();
-                  firebase.database().ref().update(appUpdates);
+          getUserObject(studentId)
+            .then(student => {
+              getScholarshipObject(scholarshipId)
+                .then(scholarship => {
+                    if (confirm("Please Confirm: You are about to award the scholarship " + scholarship.name + " for $" + scholarship.amount + " to " + student.name + ".")) { // TODO: Get correct variables
+                        checkIfStudentAwardedScholarship(studentId).then(u => {
+                          // Student has not been awarded a scholarship yet. Student may apply.
+                          let appUpdates = {};
+                          let appRef = '/Applications/'+applicationId;
+                          // Set status of application to 'awarded : true; reviewed : true; dataReviewed : Date()'
+                          appUpdates[appRef+'/status/awarded'] = true;
+                          appUpdates[appRef+'/status/reviewed'] = true;
+                          appUpdates[appRef+'/status/dateReviewed'] = Date();
+                          firebase.database().ref().update(appUpdates);
 
-                  incrementScholarshipStats(scholarshipId, 'accept').then(s => {
-                    console.log("Scholarship stats updated");
-                  });
+                          incrementScholarshipStats(scholarshipId, 'accept').then(s => {
+                            console.log("Scholarship stats updated");
+                          });
 
-                  getUserObject(studentId)
-                    .then(student => {
-                      getScholarshipObject(scholarshipId)
-                        .then(scholarship => {
-
-                            /* Call function here */
-                            // sendEmail(student, scholarship.name) // TODO: This has not been imlemented yet
-
+                          // Notify student by email
+                          sendAccepted(student, scholarship.name);
                         })
-                        .catch(e => console.log(e));
-                    })
-                    .catch(e => console.log(e));
+                        .catch(e => alert("Error: Student has already been awarded a scholarship."));
+                    } else {
+                        alert("Scholarship has not been awarded.")
+                    }
                 })
-                .catch(e => alert("Error: Student has already been awarded a scholarship."));
-            } else {
-                alert("Scholarship has not been awarded.")
-            }
+                .catch(e => console.log(e));
+            })
+            .catch(e => console.log(e));
+
         } else if (choice === 'reject') {
             // Student has not been awarded a scholarship yet. Student may apply.
             let appUpdates = {};
@@ -113,6 +140,15 @@
             incrementScholarshipStats(scholarshipId, 'review').then(s => {
               console.log("Scholarship stats updated");
             });
+             getUserObject(studentId)
+            .then(student => {
+              getScholarshipObject(scholarshipId)
+                .then(scholarship => {
+                  sendDeclined(student, scholarship.name);
+                })
+                .catch(e => console.log(e));
+            })
+            .catch(e => console.log(e));
 
             alert("Application has been rejected.")
         }
@@ -191,7 +227,7 @@
         }
 
         firebase.auth().onAuthStateChanged(firebaseUser => {
-        	if (firebaseUser) {
+          if (firebaseUser) {
             // Check if account type = Coordinator (Required to be able to access this page)
             getUserObject(firebaseUser.uid).then(accountObj => {
               // If account type != Coordinator, redirect to index.html
@@ -201,7 +237,7 @@
             });
             // Get all applications for context coordinator and pass a callback function
             getAllApplicationsForCoordinator(firebaseUser.uid, cb)
-        	}
+          }
         });
       }
 
