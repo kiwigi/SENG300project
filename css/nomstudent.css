@@ -1,0 +1,17 @@
+h2 {
+    padding-top: 0.5em;
+}
+
+.student-info p {
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
+}
+
+.student-nom button {
+    margin-top: 0.5em;
+}
+
+#ic {
+    width: 25px;
+    text-align: center;
+}
