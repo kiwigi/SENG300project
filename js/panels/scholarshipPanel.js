@@ -1,13 +1,9 @@
 /**
  * This file represents the functionality for the scholarship panel to add scholarships.
  * This functionality should only be accessed by an administrator.
- * TODO: Make it so only accounts with an admin ID can use this functionality.
  */
 
 (function(){
-
-  // const DEGREES = ["CPSC","ENGG"];
-
   /**
    * Get submit button element, and add an event listener upon click.
    */
@@ -32,7 +28,7 @@
       degrees: $('#degrees').val(),
       coordinator: $('#coordinator').val(),
       dateAdded: Date(),
-      addedBy: "ADMIN_ID" // TODO: Change this once account functionality is implemented
+      addedBy: null // OPTIONAL: Change this to the Admin's ID if you want to keep track of who adds each scholarship
     })
 
     getScholarship(uid);
@@ -41,6 +37,7 @@
   /**
    * Gets a specific scholarship based on key value (unique ID).
    * For now, just prints out that it has succesfully added the scholarship to the database.
+   * @param uid The scholarship's unique ID
    */
   function getScholarship(uid) {
     firebase.database().ref('/Scholarships').once('value', function(snapshot) {
