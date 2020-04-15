@@ -118,6 +118,11 @@ btnSubmitScholarship.addEventListener('click', e => {
  * Adds application to the database. First checks to see if student has already applied to the scholarship before.
 */
 function addApplication() {
+		// Get Scholarship ID
+		var schID = localStorage.getItem("SchID");
+		var sRef = firebase.database().ref("Scholarships/" + schID);
+		var aRef = sRef.child("applications"); // application ref
+
     // Uploads the file into database's 'storage' section
     const ref = firebase.storage().ref('/studentDocuments') // Tells it where to put the file
     const file = document.querySelector("#sFile").files[0] // Get first element uploaded
@@ -127,43 +132,49 @@ function addApplication() {
     }
     const task = ref.child(name).put(file, metadata) // Pass file and type of uploaded document
     task
-        .then(snapshot => snapshot.ref.getDownloadURL)
-        .then(url => console.log(url))
+				.then(snapshot => snapshot.ref.getDownloadURL().then( url =>
+					{
+						firebase.auth().onAuthStateChanged(firebaseUser => {
+				        if (firebaseUser) {
+									checkIfApplicationAlreadyExists(schID, firebaseUser.uid)
+										.then(bool => {
+												alert("Error: You have already applied for this application.")
+										})
+										.catch(e => {
+											let ref = firebase.database().ref('/Applications/' + guid()); // Get reference for application section from database
+											let uid = guid(); // Create a unique ID for this application (will be the key in the database)
+											firebase.database().ref("Applications/"+uid).set({
+												appliedBy: firebaseUser.uid,
+												dateApplied: Date(),
+												documentURL: url,
+												reference: {
+													name: document.getElementById("reference1name").value,
+													phone: document.getElementById("reference1phone").value,
+													email: document.getElementById("reference1email").value
+												},
+												scholarshipId: schID,
+												status: {
+													awarded: false,
+													dateReviewed: null,
+													reviewed: false
+												}
+											})
+
+											incrementScholarshipStats(scholarshipId, 'apply').then(s => {
+					              console.log("Scholarship stats updated");
+					            });
+
+											// TODO: MAKE THIS INTO A SEPARATE PAGE
+									    alert('Thanks for your application!');
+										});
+				        }
+				    });
+					}))
         .catch(console.error);
 
-    // Get Scholarship ID
-    var schID = localStorage.getItem("SchID");
-    var sRef = firebase.database().ref("Scholarships/" + schID);
-    var aRef = sRef.child("applications"); // application ref
 
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-        if (firebaseUser) {
-					checkIfApplicationAlreadyExists(schID, firebaseUser.uid)
-						.then( alert("Error: You have already applied for this application.") )
-						.catch(e => {
-							let ref = firebase.database().ref('/Applications/' + guid()); // Get reference for application section from database
-							let uid = guid(); // Create a unique ID for this application (will be the key in the database)
-							firebase.database().ref("Applications/"+uid).set({
-								appliedBy: firebaseUser.uid,
-								dateApplied: Date(),
-								documentURL: null, // TODO: Make this a link or ID to the document the student has uploaded
-								reference: {
-									name: document.getElementById("reference1name").value,
-									phone: document.getElementById("reference1phone").value,
-									email: document.getElementById("reference1email").value
-								},
-								scholarshipId: schID, // TODO: Replace with schID
-								status: {
-									awarded: false,
-									dateReviewed: null,
-									reviewed: false
-								}
-							})
-							// TODO: MAKE THIS INTO A SEPARATE PAGE
-					    alert('Thanks for your application!');
-						});
-        }
-    });
+
+
 }
 </script>
 

@@ -80,13 +80,17 @@
                   appUpdates[appRef+'/status/dateReviewed'] = Date();
                   firebase.database().ref().update(appUpdates);
 
+                  incrementScholarshipStats(scholarshipId, 'accept').then(s => {
+                    console.log("Scholarship stats updated");
+                  });
+
                   getUserObject(studentId)
                     .then(student => {
                       getScholarshipObject(scholarshipId)
                         .then(scholarship => {
 
                             /* Call function here */
-                            sendEmail(student, scholarship.name)
+                            // sendEmail(student, scholarship.name) // TODO: This has not been imlemented yet
 
                         })
                         .catch(e => console.log(e));
@@ -105,6 +109,11 @@
             appUpdates[appRef+'/status/reviewed'] = true;
             appUpdates[appRef+'/status/dateReviewed'] = Date();
             firebase.database().ref().update(appUpdates);
+
+            incrementScholarshipStats(scholarshipId, 'review').then(s => {
+              console.log("Scholarship stats updated");
+            });
+
             alert("Application has been rejected.")
         }
       }
@@ -121,20 +130,22 @@
           document.getElementById("testDisplay").innerHTML = 'test ' + args; // TODO: Remove this line...
 
           args.forEach( (arg, i) => {
+            console.log('i',i);
             let ref = firebase.database().ref('/Applications/' + arg);
             ref.on('value', function(snapshot) {
               let app = snapshot.val();
               // First check to see if scholarship has been reviewed already
               if(app.status.reviewed == false) {
-                  let divName = 'userInfo'+i;
-                  let divScholarshipName = 'scholarship'+i;
-                  let divReviewName = 'review'+i;
+                  let divName = 'userInfo-'+arg;
+                  let divScholarshipName = 'scholarship-'+arg;
+                  let divReviewName = 'review-'+arg;
                   let tmp = '';
                   tmp += '<div class="col-md-4 col-sm-4">';
                   tmp += '    <div class="application-info">';
                   tmp += '<div id="'+divScholarshipName+'"></div>'
                   tmp += '<div id="'+divName+'"></div>'
                   tmp += '      <p><i id="ic" class="fa fa-calendar" aria-hidden="true"></i> <b>Date Applied:</b> ' + app['dateApplied'] + '</p>';
+                  tmp += '      <p><i id="ic" class="fa fa-clipboard" aria-hidden="true"></i> <b>Supporting Documents:</b> <a href="' + app['documentURL'] + '">Download</a></p>';
                   tmp += '      <p><i id="ic" class="fa fa-users" aria-hidden="true"></i> <b>Reference:</b></p>';
                   tmp += '        <ul>';
                   tmp += '          <li>Name: '+app['reference']['name']+'</li>';
@@ -145,6 +156,7 @@
                   tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+app['scholarshipId']+'\',\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'accept\')">Award Scholarship</button></div>'
                   tmp += '<div id="'+divReviewName+'"><button onclick="reviewScholarship(\''+app['scholarshipId']+'\',\''+snapshot.key+'\',\''+app['appliedBy']+'\', \'reject\')">Reject Application</button></div>'
                   tmp += '</div>';
+                  console.log('writing divs',arg);
                   $('#panels').prepend(tmp);
 
                   let scholarship = getScholarshipObject(app['scholarshipId']).then( scholarshipInfo => {
