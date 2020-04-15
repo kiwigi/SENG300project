@@ -121,31 +121,6 @@ function getApplicationsForScholarship(scholarshipId) {
   });
 }
 
-// /**
-//  * Forms a list of all application IDs for all scholarships for a given coordinator ID
-//  * Then uses a callback to do something specific with this list
-//  * @param {String} coordinatorId The coordinator's unique ID
-//  * @param {Function} callback The callback function to utilize the list of application IDs as an argument
-// */
-// function getAllApplicationsForCoordinator(coordinatorId, callback) {
-//   let applicationIds = [];
-//   getAssignedScholarships(coordinatorId)
-//     .then(scholarshipIds => {
-//                   console.log('scholarshipIds',scholarshipIds);
-//                   scholarshipIds.forEach( scholarshipId => {
-//                       getApplicationsForScholarship(scholarshipId)
-//                         .then( applications => {
-//                             applicationIds.push(applications);
-//                             console.log('applicationIds array',applicationIds);
-//                             console.log('applications',applications);
-//                             callback(applications)
-//                         })
-//                         .catch(e => console.log(e));
-//                   })
-//                })
-//     .catch(e => console.log(e));
-//
-// }
 
 /**
  * Forms a list of all application IDs for all scholarships for a given coordinator ID
