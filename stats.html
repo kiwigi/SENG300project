@@ -66,9 +66,9 @@
 
     <script>
       /**
-       * Gets scholarships and appends their data to webpage
+       * Gets scholarships + stats and appends their data to webpage
        */
-      function getData() {
+      function getStatData() {
           firebase.database().ref('/Scholarships').once('value', function(snapshot) {
               snapshot.forEach(function(childSnapshot) {
                   let childKey = childSnapshot.key;
@@ -111,7 +111,7 @@
           })
       }
 
-      getData();
+      getStatData();
 
       firebase.auth().onAuthStateChanged(firebaseUser => {
           if (firebaseUser) {

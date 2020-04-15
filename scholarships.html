@@ -85,8 +85,9 @@
         }
 
         /**
-         * Checks to see if student's GPA is at least that of the scholarship's minimum GPA requirement
-         */
+          * Checks to see if student's GPA is at least that of the scholarship's minimum GPA requirement
+          * @param scholarship
+          */
         function checkIfGPAValid(scholarship, student) {
             if (parseFloat(scholarship.gpaRequired) <= parseFloat(student.gpa)) {
                 return true;
@@ -144,9 +145,6 @@
                                   }
                                 })
                                 .catch(e => console.log(e));
-
-                                /* */
-
 
                             } else {
                                 alert("Invalid degree or GPA not high enough.")
