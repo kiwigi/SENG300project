@@ -115,18 +115,13 @@
 
       firebase.auth().onAuthStateChanged(firebaseUser => {
           if (firebaseUser) {
-              document.getElementById("emailDisplay").innerHTML = firebaseUser.email;
-              // Get reference for student from database
-              let ref = firebase.database().ref('/Users/Student/' + firebaseUser.uid);
-              // Get student object
-              ref.on('value', function(studentSnapshot) {
-                  let student = studentSnapshot.val();
-                  document.getElementById("gpaDisplay").innerHTML = student.gpa;
-                  document.getElementById("majorDisplay").innerHTML = student.degree.major.toUpperCase();
-                  document.getElementById("minorDisplay").innerHTML = student.degree.minor.toUpperCase();
-                  document.getElementById("gradDisplay").innerHTML = student.graduateType;
-              })
-              document.getElementById("emailDisplay").innerHTML = firebaseUser.email;
+            // Check if account type = Coordinator (Required to be able to access this page)
+            getUserObject(firebaseUser.uid).then(accountObj => {
+              // If account type != Coordinator, redirect to index.html
+              if(accountObj.accountType != 'Coordinator'){
+                window.location = "index.html";
+              }
+            });
           } else {
               window.location = "login.html";
               console.log('Not logged in')
