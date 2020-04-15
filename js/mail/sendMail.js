@@ -1,4 +1,3 @@
-//index.js  
 function sendAccepted(student,scholarshipName) {
     Email.send({
     Host: "smtp.gmail.com",
