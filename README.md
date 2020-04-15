@@ -29,7 +29,7 @@ Our database is set up in the following order:
     - Contains scholarships and scholarship nominations with each key being a unique ID
 + `Users`
     - Contains the four categories for users, `Student`, `Professor`, `Coordinator`, and `Admin`
-    - Each user has their own properties (i.e. `Student` has the property `GPA`) and unique ID
+    - Each user has their own properties (e.g. `Student` has the property `GPA`) and unique ID
 
 Cloud storage is used to host student's documents, which are uploaded as an attachment to their applications. Coordinators are able to download these documents when reviewing the applications.
 
