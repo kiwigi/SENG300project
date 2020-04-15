@@ -23,8 +23,6 @@ function checkIfStudentAwardedScholarship(studentId) {
   });
 }
 
-checkIfStudentAwardedScholarship('dLqEPcNkmgQGKL1U2VSJm8CkZjP2').then(u => console.log('student has not been awarded a scholarship',u))
-                                                            .catch(e => console.log(e));
 
 /**
  * Returns a list of application IDs for a given student
@@ -48,10 +46,6 @@ function getStudentApplications(studentId) {
     })
   });
 }
-
-getStudentApplications('dLqEPcNkmgQGKL1U2VSJm8CkZjP2').then(u => console.log('student has applied',u))
-                                                            .catch(e => alert(e));
-
 
 
 /**
@@ -79,8 +73,6 @@ function checkIfApplicationAlreadyExists(scholarshipId, studentId){
   });
 }
 
-checkIfApplicationAlreadyExists('610e6a8c-054c-cf7a-036a-22ba7a1e60fd', 'dLqEPcNkmgQGKL1U2VSJm8CkZjP2').then(u => printObject(u))
-                                                            .catch(e => alert(e));
 
 /**
  * Returns a list of assigned scholarship IDs for a given coordinator ID
@@ -105,8 +97,6 @@ function getAssignedScholarships(coordinatorId) {
   });
 }
 
-getAssignedScholarships('VkDvVWJQbGMWRh3viWizcu0FHq62').then(u => printObject(u)) // uid should be firebaseUser.uid
-                                                            .catch(e => alert(e));
 
 /**
  * Returns a list of application IDs for a given scholarship ID
@@ -130,11 +120,6 @@ function getApplicationsForScholarship(scholarshipId) {
     })
   });
 }
-
-getApplicationsForScholarship('610e6a8c-054c-cf7a-036a-22ba7a1e60fd').then(u => printObject(u)) // uid should be firebaseUser.uid
-                                                            .catch(e => alert(e));
-
-
 
 // /**
 //  * Forms a list of all application IDs for all scholarships for a given coordinator ID
@@ -195,9 +180,6 @@ function getAllApplicationsForCoordinator(coordinatorId, callback) {
 
 }
 
-function callback(applications) {
-  console.log("Now I can do something with this: ",applications);
-}
 
 /**
  * Returns an application object for a given application ID
@@ -219,11 +201,4 @@ function getApplicationObject(applicationId) {
 
       })
   });
-}
-
-getApplicationObject('68b2d825-4783-ac6c-5971-c0b97a6234be').then(u => printObject(u)) // uid should be firebaseUser.uid
-                                                            .catch(e => alert(e));
-
-function printObject(u) {
-  console.log('App:',u);
 }
