@@ -53,3 +53,55 @@
   }
 
 }())
+
+/**
+ * Gets all degrees from enum and displays them in checkbox
+ */
+function getDegrees() {
+  firebase.database().ref('/Degrees').once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot)
+    {
+      let childKey = childSnapshot.key;
+      let childData = childSnapshot.val();
+      let htm = '';
+      htm += '<option value="' + childKey + '">' + childData['name'] + '</option>';
+      $('#degrees').append(htm);
+      $('#degrees').multiselect('rebuild');
+    })
+  })
+
+  $(function() {
+      $('#degrees').multiselect({
+          includeSelectAllOption: true
+      });
+      $('#btnget').click(function(){
+          console.log($('#degrees').val());
+      });
+  });
+}
+
+/**
+ * Gets all coordinators from database query and displays them in checkbox
+ */
+function getCoordinators() {
+  firebase.database().ref('/Users/Coordinator').once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot)
+    {
+      let childKey = childSnapshot.key;
+      let childData = childSnapshot.val();
+      var htm = '';
+      htm += '<option value="' + childKey + '">' + childData['name'] + '</option>';
+      $('#coordinator').append(htm);
+      $('#coordinator').multiselect('rebuild');
+    })
+  })
+
+  $(function() {
+      $('#coordinator').multiselect({
+          includeSelectAllOption: true
+      });
+      $('#btnget').click(function(){
+          console.log($('#coordinator').val());
+      });
+  });
+}
