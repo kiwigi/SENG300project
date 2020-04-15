@@ -18,6 +18,7 @@
 
     <!-- Scripts for FontAwesome -->
     <script src="https://use.fontawesome.com/9c5fe71092.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script> 
 
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/nomstudent.css">
@@ -70,14 +71,37 @@
     <script src="app.js"></script>
     
     <script>
-        function nominate(studentId){
+    
+    //sends e-mail to student if nominated 
+    function sendNominated(studentId, scholarshipName) {
+        //grab student info
+        let ref = firebase.database().ref('/Users/Student/' + studentId);
+		ref.on('value', function(studentSnapshot) {
+			let student = studentSnapshot.val();
+        //send email
+        Email.send({
+        Host: "smtp.gmail.com",
+        Username : "scholarshipapp20@gmail.com",
+        Password : "sohaibrocks300",
+        To : ''+student.email,                                  
+        From : "scholarship.admin@scholarships.com",
+        Subject : "Congratulations "+student.name+"!",
+        Body : "You've been nominated for this scholarship "+scholarshipName,
+        }).then(
+        message => alert("mail sent successfully")
+        );
+    })
+    }
+
+    
+    function nominate(studentId){
             
 	//////////////// gets scholarship ID ////////////////////
-	
+            
 	var schID = localStorage.getItem("SchID");
 	var sRef = firebase.database().ref("Scholarships/"+schID);
 	var aRef = sRef.child("nominations");						//nomination ref
-
+    
 	///////////// get user data ////////////////
 
 		// Get reference for student from database
@@ -87,10 +111,12 @@
 			let student = studentSnapshot.val();
 			
 	///////// pushes application on database ///////////
-
-	var datRef = aRef.push();
+    var user = firebase.auth().currentUser; //gets prof name
+    if (user) {
+	let profEmail = user.email;
+    var datRef = aRef.push();
 	datRef.set({
-        nominatedBy: 'name',
+        nominatedBy: profEmail,
 		name: student.name,
 		department: student.department,
 		major: student.degree.major,
@@ -99,10 +125,18 @@
 		gpa: student.gpa,
 		nominationDate: Date()
 	})
-})
-} 
-
-
+    } else {                                //if user not signed in, error
+        alert("ERROR, please sign in!");
+    }})
+    alert("Success!");
+    
+    sRef.on("value", function(snapshot) {
+        let scholarshipp = snapshot.val();
+        let scholarshipName = scholarshipp.name;
+        sendNominated(studentId, scholarshipName);
+    }
+    )
+    } 
 
 
      //get student info

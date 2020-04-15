@@ -74,65 +74,6 @@
     <script src="app.js"></script>
 
     <script>
-        /**
-         * Checks to see if student's degree matches scholarship's eligible degrees
-         */
-        function checkIfDegreeValid(scholarship, student) {
-            if (scholarship.degrees.includes(student.degree.major) || scholarship.degrees.includes(student.degree.minor)) { // Gets warning if student's minor is undefined
-                return true;
-            } else {
-                return false; // Probably don't need to return false
-            }
-        }
-
-        /**
-         * Checks to see if student's GPA is at least that of the scholarship's minimum GPA requirement
-         */
-        function checkIfGPAValid(scholarship, student) {
-            if (parseFloat(scholarship.gpaRequired) <= parseFloat(student.gpa)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * When a user presses "Apply", this function will be called which checks to see if the user has
-         * 1. An eligible degree for the scholarship applied for
-         * 2. The minimum GPA required for the scholarship
-         * TODO: 3. The eligible graduate type for the scholarship
-         */
-        function checkIfScholarshipValid(scholarshipId) {
-            // Check if user is logged in first
-            firebase.auth().onAuthStateChanged(firebaseUser => {
-                if (firebaseUser) {
-                    // Get reference for student from database
-                    let ref = firebase.database().ref('/Users/Student/' + firebaseUser.uid);
-                    // Get student object
-                    ref.on('value', function(studentSnapshot) {
-                        // Get reference for scholarship from database
-                        let scholarshipRef = firebase.database().ref('/Scholarships/' + scholarshipId);
-                        // Get scholarship object
-                        scholarshipRef.on('value', function(scholarshipSnapshot) {
-                            let scholarship = scholarshipSnapshot.val();
-                            let student = studentSnapshot.val();
-                            // Check if student has valid degree and GPA for scholarship
-                            if (checkIfDegreeValid(scholarship, student) && checkIfGPAValid(scholarship, student)) {
-                                console.log("Student has appropriate major/minor and GPA for scholarship.");
-                                //store scholarship ID for application use
-                                localStorage.setItem("SchID", scholarshipId);
-                                // Redirect user to apply page
-                                window.location = "application.html";
-                            } else {
-                                alert("Invalid degree or GPA not high enough.")
-                            }
-                        })
-                    })
-                } else {
-                    console.log('Error getting user ID');
-                }
-            });
-        }
         //redirect
         function choose(scholarshipId){
         //store scholarship ID for application use
